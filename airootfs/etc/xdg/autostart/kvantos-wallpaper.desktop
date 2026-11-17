@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=KvantOS Wallpaper
+Comment=Применить фирменный фон KvantOS в live-сессии
+Exec=/usr/local/bin/kvantos-set-wallpaper
+Icon=preferences-desktop-wallpaper
+Terminal=false
+OnlyShowIn=KDE;
+X-GNOME-Autostart-enabled=false

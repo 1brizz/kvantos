@@ -1,0 +1,3 @@
+# Live-сессия KvantOS: пользователь kvantos — sudo без пароля
+# (у live-аккаунта пароль заблокирован, автологин через SDDM)
+kvantos ALL=(ALL:ALL) NOPASSWD: ALL

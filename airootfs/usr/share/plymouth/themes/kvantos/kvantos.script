@@ -1,0 +1,275 @@
+// KvantOS Plymouth theme — реализация спецификации v5 (README.txt).
+// Орбита звезды: Rx=300 Ry=92, наклон -12°, период 3.2с.
+// Свечение логотипа 1.0->1.2 с периодом 1.6с (8 прекомпилированных кадров).
+// 140 звёзд (детерминированные), кометы только справа-налево и вниз,
+// спавн каждые 3.2с, жизнь 1.55с. Бесшовный цикл 12.8с.
+
+screen_w = Plymouth.GetScreenWidth();
+screen_h = Plymouth.GetScreenHeight();
+cx = screen_w / 2;
+cy = screen_h / 2 + 30;
+
+background = new Image("background.png");
+logo_img = new Image("logo.png");
+star_img = new Image("star.png");
+comet_img = new Image("comet.png");
+
+logo_frames = [];
+for (i = 0; i < 8; i++)
+    logo_frames[i] = new Image("logo_s" + i + ".png");
+
+// фон
+bg = Sprite(background);
+bg.SetX(0); bg.SetY(0); bg.SetZ(0);
+
+// логотип (анкер — центр)
+logo_w = logo_img.GetWidth();
+logo_h = logo_img.GetHeight();
+logo = Sprite(logo_img);
+logo.SetX(cx - logo_w / 2);
+logo.SetY(cy - logo_h / 2);
+logo.SetZ(10);
+
+// орбiting звезда
+star = Sprite(star_img);
+star.SetZ(20);
+
+// звёздное поле
+STARS = [
+  {x:1650,y:26,img:'dot_w01',T:3.2,ph:0.216},
+  {x:893,y:12,img:'dot_c22',T:3.2,ph:0.707},
+  {x:1770,y:793,img:'dot_w12',T:6.4,ph:0.664},
+  {x:1125,y:1035,img:'dot_w10',T:1.6,ph:0.914},
+  {x:1026,y:136,img:'dot_w10',T:1.6,ph:0.507},
+  {x:1882,y:1079,img:'dot_c01',T:6.4,ph:0.165},
+  {x:630,y:79,img:'dot_c22',T:3.2,ph:0.634},
+  {x:272,y:526,img:'dot_w01',T:6.4,ph:0.512},
+  {x:588,y:221,img:'dot_c30',T:1.6,ph:0.825},
+  {x:711,y:818,img:'dot_c11',T:3.2,ph:0.741},
+  {x:450,y:304,img:'dot_w21',T:6.4,ph:0.508},
+  {x:1569,y:131,img:'dot_c01',T:3.2,ph:0.092},
+  {x:1491,y:778,img:'dot_c02',T:3.2,ph:0.941},
+  {x:93,y:453,img:'dot_c32',T:6.4,ph:0.990},
+  {x:950,y:862,img:'dot_c10',T:1.6,ph:0.470},
+  {x:364,y:864,img:'dot_c22',T:3.2,ph:0.850},
+  {x:1622,y:34,img:'dot_c02',T:6.4,ph:0.968},
+  {x:1601,y:1048,img:'dot_w21',T:1.6,ph:0.801},
+  {x:597,y:1010,img:'dot_c20',T:1.6,ph:0.421},
+  {x:472,y:939,img:'dot_c12',T:3.2,ph:0.382},
+  {x:932,y:56,img:'dot_w22',T:6.4,ph:0.517},
+  {x:216,y:342,img:'dot_c10',T:6.4,ph:0.265},
+  {x:59,y:277,img:'dot_c20',T:6.4,ph:0.692},
+  {x:1861,y:632,img:'dot_c31',T:6.4,ph:0.984},
+  {x:384,y:276,img:'dot_c01',T:3.2,ph:0.963},
+  {x:1845,y:972,img:'dot_c20',T:6.4,ph:0.325},
+  {x:1106,y:960,img:'dot_c01',T:6.4,ph:0.397},
+  {x:85,y:149,img:'dot_c31',T:1.6,ph:0.427},
+  {x:423,y:1026,img:'dot_c01',T:3.2,ph:0.958},
+  {x:488,y:359,img:'dot_c11',T:3.2,ph:0.911},
+  {x:609,y:986,img:'dot_c00',T:3.2,ph:0.788},
+  {x:89,y:486,img:'dot_c01',T:1.6,ph:0.180},
+  {x:1868,y:933,img:'dot_c10',T:1.6,ph:0.101},
+  {x:158,y:753,img:'dot_c20',T:3.2,ph:0.891},
+  {x:1648,y:571,img:'dot_c01',T:6.4,ph:0.395},
+  {x:1557,y:838,img:'dot_c11',T:3.2,ph:0.546},
+  {x:952,y:872,img:'dot_c32',T:6.4,ph:0.119},
+  {x:1448,y:288,img:'dot_c12',T:3.2,ph:0.137},
+  {x:392,y:704,img:'dot_c31',T:6.4,ph:0.795},
+  {x:411,y:486,img:'dot_c02',T:1.6,ph:0.784},
+  {x:700,y:165,img:'dot_c01',T:1.6,ph:0.168},
+  {x:860,y:842,img:'dot_w00',T:1.6,ph:0.265},
+  {x:1429,y:121,img:'dot_c00',T:1.6,ph:0.755},
+  {x:451,y:702,img:'dot_c20',T:3.2,ph:0.404},
+  {x:1125,y:965,img:'dot_c00',T:6.4,ph:0.075},
+  {x:1064,y:283,img:'dot_w02',T:3.2,ph:0.494},
+  {x:104,y:720,img:'dot_w21',T:3.2,ph:0.109},
+  {x:636,y:1011,img:'dot_c11',T:3.2,ph:0.392},
+  {x:1323,y:71,img:'dot_w20',T:3.2,ph:0.826},
+  {x:728,y:236,img:'dot_c02',T:1.6,ph:0.144},
+  {x:988,y:1036,img:'dot_c11',T:1.6,ph:0.058},
+  {x:1372,y:985,img:'dot_c32',T:6.4,ph:0.788},
+  {x:1327,y:61,img:'dot_c20',T:3.2,ph:0.917},
+  {x:571,y:95,img:'dot_c12',T:6.4,ph:0.351},
+  {x:1052,y:938,img:'dot_c31',T:6.4,ph:0.133},
+  {x:186,y:985,img:'dot_c00',T:3.2,ph:0.433},
+  {x:1020,y:983,img:'dot_c22',T:1.6,ph:0.884},
+  {x:983,y:820,img:'dot_w31',T:3.2,ph:0.569},
+  {x:974,y:805,img:'dot_c11',T:1.6,ph:0.999},
+  {x:836,y:793,img:'dot_c30',T:3.2,ph:0.135},
+  {x:1628,y:410,img:'dot_c32',T:3.2,ph:0.062},
+  {x:862,y:843,img:'dot_w32',T:3.2,ph:0.107},
+  {x:639,y:68,img:'dot_c32',T:3.2,ph:0.727},
+  {x:1219,y:885,img:'dot_c22',T:6.4,ph:0.588},
+  {x:1611,y:176,img:'dot_c01',T:6.4,ph:0.313},
+  {x:601,y:289,img:'dot_c20',T:3.2,ph:0.625},
+  {x:870,y:105,img:'dot_c02',T:6.4,ph:0.672},
+  {x:1853,y:155,img:'dot_w20',T:3.2,ph:0.029},
+  {x:438,y:15,img:'dot_w12',T:6.4,ph:0.569},
+  {x:1025,y:2,img:'dot_c00',T:3.2,ph:0.004},
+  {x:247,y:124,img:'dot_c21',T:6.4,ph:0.248},
+  {x:509,y:927,img:'dot_w20',T:3.2,ph:0.270},
+  {x:1896,y:912,img:'dot_w02',T:6.4,ph:0.698},
+  {x:497,y:319,img:'dot_c02',T:3.2,ph:0.865},
+  {x:79,y:895,img:'dot_c02',T:3.2,ph:0.965},
+  {x:243,y:130,img:'dot_c01',T:1.6,ph:0.305},
+  {x:1001,y:100,img:'dot_w10',T:3.2,ph:0.590},
+  {x:879,y:148,img:'dot_c10',T:6.4,ph:0.666},
+  {x:779,y:224,img:'dot_c12',T:6.4,ph:0.443},
+  {x:1264,y:84,img:'dot_c01',T:1.6,ph:0.381},
+  {x:1601,y:201,img:'dot_c00',T:6.4,ph:0.691},
+  {x:142,y:1066,img:'dot_c30',T:6.4,ph:0.257},
+  {x:827,y:2,img:'dot_c21',T:6.4,ph:0.226},
+  {x:100,y:889,img:'dot_c12',T:6.4,ph:0.301},
+  {x:174,y:120,img:'dot_c01',T:6.4,ph:0.775},
+  {x:1288,y:45,img:'dot_c00',T:3.2,ph:0.702},
+  {x:145,y:604,img:'dot_c00',T:6.4,ph:0.692},
+  {x:1546,y:318,img:'dot_c12',T:3.2,ph:0.075},
+  {x:321,y:14,img:'dot_w00',T:1.6,ph:0.608},
+  {x:1487,y:846,img:'dot_c01',T:3.2,ph:0.890},
+  {x:792,y:980,img:'dot_c00',T:1.6,ph:0.904},
+  {x:523,y:705,img:'dot_c11',T:3.2,ph:0.765},
+  {x:119,y:702,img:'dot_w00',T:1.6,ph:0.853},
+  {x:766,y:112,img:'dot_w31',T:1.6,ph:0.782},
+  {x:161,y:203,img:'dot_w32',T:6.4,ph:0.981},
+  {x:4,y:848,img:'dot_c01',T:1.6,ph:0.695},
+  {x:687,y:894,img:'dot_c22',T:1.6,ph:0.557},
+  {x:545,y:1038,img:'dot_c11',T:6.4,ph:0.145},
+  {x:602,y:922,img:'dot_w11',T:1.6,ph:0.948},
+  {x:704,y:1038,img:'dot_c22',T:3.2,ph:0.477},
+  {x:1422,y:768,img:'dot_c02',T:1.6,ph:0.865},
+  {x:370,y:600,img:'dot_w32',T:1.6,ph:0.402},
+  {x:1718,y:135,img:'dot_w01',T:1.6,ph:0.513},
+  {x:132,y:393,img:'dot_w01',T:6.4,ph:0.370},
+  {x:13,y:947,img:'dot_c21',T:3.2,ph:0.431},
+  {x:1813,y:220,img:'dot_w30',T:3.2,ph:0.389},
+  {x:296,y:772,img:'dot_c30',T:6.4,ph:0.297},
+  {x:252,y:92,img:'dot_w11',T:3.2,ph:0.434},
+  {x:1741,y:298,img:'dot_c32',T:1.6,ph:0.107},
+  {x:490,y:403,img:'dot_w30',T:3.2,ph:0.327},
+  {x:1585,y:140,img:'dot_c20',T:6.4,ph:0.466},
+  {x:1525,y:825,img:'dot_w01',T:6.4,ph:0.325},
+  {x:1800,y:948,img:'dot_c30',T:1.6,ph:0.477},
+  {x:364,y:694,img:'dot_w31',T:3.2,ph:0.707},
+  {x:1675,y:378,img:'dot_c01',T:6.4,ph:0.062},
+  {x:1039,y:53,img:'dot_c11',T:6.4,ph:0.177},
+  {x:351,y:612,img:'dot_w02',T:6.4,ph:0.260},
+  {x:728,y:839,img:'dot_w01',T:3.2,ph:0.673},
+  {x:804,y:811,img:'dot_c31',T:3.2,ph:0.390},
+  {x:1121,y:994,img:'dot_c10',T:6.4,ph:0.487},
+  {x:372,y:801,img:'dot_c20',T:6.4,ph:0.819},
+  {x:769,y:70,img:'dot_c01',T:3.2,ph:0.025},
+  {x:1384,y:1039,img:'dot_c22',T:3.2,ph:0.485},
+  {x:96,y:216,img:'dot_c10',T:6.4,ph:0.002},
+  {x:1528,y:118,img:'dot_w12',T:1.6,ph:0.110},
+  {x:1000,y:195,img:'dot_c11',T:1.6,ph:0.507},
+  {x:1673,y:149,img:'dot_c01',T:1.6,ph:0.574},
+  {x:866,y:93,img:'dot_c10',T:3.2,ph:0.167},
+  {x:1531,y:142,img:'dot_c32',T:1.6,ph:0.675},
+  {x:177,y:671,img:'dot_c02',T:3.2,ph:0.628},
+  {x:144,y:877,img:'dot_c12',T:6.4,ph:0.777},
+  {x:1821,y:25,img:'dot_c12',T:6.4,ph:0.653},
+  {x:1682,y:785,img:'dot_w02',T:3.2,ph:0.135},
+  {x:255,y:309,img:'dot_c10',T:1.6,ph:0.301},
+  {x:1570,y:227,img:'dot_w01',T:6.4,ph:0.945},
+  {x:80,y:416,img:'dot_c11',T:6.4,ph:0.422},
+  {x:242,y:223,img:'dot_c02',T:1.6,ph:0.088},
+  {x:1530,y:173,img:'dot_c01',T:3.2,ph:0.537},
+  {x:736,y:282,img:'dot_w12',T:6.4,ph:0.510},
+  {x:1222,y:959,img:'dot_w11',T:6.4,ph:0.978}
+];
+star_sprites = [];
+for (i = 0; i < STARS.length; i++) {
+    s = STARS[i];
+    sp = Sprite(new Image(s.img + ".png"));
+    sp.SetX(s.x - 4); sp.SetY(s.y - 4); sp.SetZ(1);
+    sp.SetOpacity(0.82); // 210/255
+    star_sprites[i] = sp;
+}
+
+// кометы: головы + по 9 хвостовых точек
+COMETS = [
+  {t0:0.0,x0:2020,y0:323.5,x1:-274,y1:993.7},
+  {t0:3.2,x0:2020,y0:84.9,x1:-186,y1:479.5},
+  {t0:6.4,x0:2020,y0:110.1,x1:-250,y1:798.8},
+  {t0:9.6,x0:2020,y0:338.3,x1:-342,y1:977.3}
+];
+comet_heads = [];
+comet_tails = [];
+for (i = 0; i < COMETS.length; i++) {
+    h = Sprite(comet_img); h.SetZ(30);
+    comet_heads[i] = h;
+    tails = [];
+    for (k = 0; k < 9; k++) {
+        t = Sprite(new Image("dot_c23.png")); // яркая прохладная точка
+        t.SetZ(29);
+        tails[k] = t;
+    }
+    comet_tails[i] = tails;
+}
+
+PI = 3.14159265358979;
+LOOP = 12800; // мс
+TILT = -12 * PI / 180;
+RX = 300; RY = 92;
+
+fun min2(a, b) { if (a < b) return a; return b; }
+
+fun refresh_callback() {
+    t = Plymouth.GetMilliseconds() % LOOP;
+    tt = t / 1000.0;
+
+    // --- звезда на эллипсе, по часовой от угла 0 ---
+    a = 2 * PI * (t / 3200.0);
+    ex = RX * Math.cos(a);
+    ey = RY * Math.sin(a);
+    sx = cx + ex * Math.cos(TILT) - ey * Math.sin(TILT);
+    sy = cy + ex * Math.sin(TILT) + ey * Math.cos(TILT);
+    star.SetX(sx - star_img.GetWidth() / 2);
+    star.SetY(sy - star_img.GetHeight() / 2);
+
+    // --- свечение логотипа: 1.0 -> 1.2, период 1.6с (8 кадров) ---
+    fi = Math.floor((t % 1600) / 200); // 0..7
+    logo.SetImage(logo_frames[fi]);
+
+    // --- мерцание звёзд ---
+    for (i = 0; i < STARS.length; i++) {
+        s = STARS[i];
+        ph = ((tt / s.T) + s.ph) % 1.0;
+        tw = 0.5 + 0.5 * Math.sin(2 * PI * ph);
+        star_sprites[i].SetOpacity(0.82 * (0.35 + 0.65 * tw));
+    }
+
+    // --- кометы ---
+    for (i = 0; i < COMETS.length; i++) {
+        c = COMETS[i];
+        local_t = t - c.t0 * 1000;
+        if (local_t < 0 || local_t > 1550) {
+            comet_heads[i].SetOpacity(0);
+            for (k = 0; k < 9; k++) comet_tails[i][k].SetOpacity(0);
+            continue;
+        }
+        p = local_t / 1550.0; // 0..1
+        hx = c.x0 + (c.x1 - c.x0) * p;
+        hy = c.y0 + (c.y1 - c.y0) * p;
+        fade = Math.sin(PI * p);
+        // направление (справа налево и вниз)
+        dx = c.x1 - c.x0; dy = c.y1 - c.y0;
+        len = Math.sqrt(dx*dx + dy*dy);
+        ux = dx / len; uy = dy / len;
+        comet_heads[i].SetX(hx - comet_img.GetWidth() / 2);
+        comet_heads[i].SetY(hy - comet_img.GetHeight() / 2);
+        comet_heads[i].SetOpacity(fade);
+        for (k = 0; k < 9; k++) {
+            kk = (k + 1) / 9.0;
+            tx2 = hx - ux * 14 * (k + 1);
+            ty2 = hy - uy * 14 * (k + 1);
+            size = 7.5 * (1 - kk) + 1.2;
+            alpha = Math.pow(1 - kk, 1.4) * 235 / 255 * fade;
+            sp = comet_tails[i][k];
+            sp.SetX(tx2 - size / 2); sp.SetY(ty2 - size / 2);
+            sp.SetOpacity(alpha);
+        }
+    }
+}
+
+Plymouth.SetRefreshFunction(refresh_callback);

@@ -1,0 +1,20 @@
+[Unit]
+Description=KvantOS: разложить застейдженный Calamares в /etc/calamares
+# ПРИНЦИП: установщик полностью самодостаточен. Файлы нельзя держать в
+# airootfs/etc/calamares напрямую — pacstrap падает с "exists in filesystem"
+# на любых путях, которые также поставляет cachyos-calamares-staging.
+# Поэтому весь /etc/calamares застейджен в /usr/share/kvantos/calamares и
+# копируется сюда при загрузке live-сессии (до запуска установщика).
+# Кастомный python-модуль kvantos-bootloaderfix — в /usr/lib/calamares/modules.
+DefaultDependencies=no
+After=local-fs.target
+Before=multi-user.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/cp -a /usr/share/kvantos/calamares/. /etc/calamares/
+ExecStart=/usr/bin/cp -a /usr/share/kvantos/calamares-pylib/. /usr/lib/calamares/
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,41 @@
+# SPDX-FileCopyrightText: no
+# SPDX-License-Identifier: CC0-1.0
+#
+# KvantOS — брендинг Calamares. Тексты и цвета; изображения (логотип,
+# иконка, обои) будут добавлены отдельным шагом — Calamares пока покажет
+# стандартные заглушки.
+---
+componentName:  kvantos
+
+welcomeStyleCalamares:   false
+welcomeExpandingLogo:    true
+
+windowExpanding:    normal
+windowSize:         1100px,520px
+windowPlacement:    center
+
+sidebar:    widget
+navigation: widget
+
+strings:
+    productName:         KvantOS
+    shortProductName:    KvantOS
+    version:             2026.11
+    shortVersion:        2026.11
+    versionedName:       KvantOS
+    shortVersionedName:  KvantOS
+    bootloaderEntryName: KvantOS
+
+style:
+   SidebarBackground:        "#1b1f24"
+   SidebarText:              "#ffffff"
+   SidebarTextCurrent:       "#1b1f24"
+   SidebarBackgroundCurrent: "#c8ebf5"
+
+slideshow:               "show.qml"
+slideshowAPI:            1
+
+images:
+    productLogo:    "productLogo.png"
+    productIcon:    "productIcon.png"
+    productWelcome: "productWelcome.png"

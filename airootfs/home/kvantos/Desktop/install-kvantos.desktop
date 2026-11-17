@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Установить KvantOS
+Comment=Запустить установщик KvantOS (Calamares)
+Exec=calamares
+Icon=calamares
+Terminal=false
+Categories=System;

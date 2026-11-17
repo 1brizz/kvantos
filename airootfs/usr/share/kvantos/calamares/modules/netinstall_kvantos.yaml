@@ -1,0 +1,289 @@
+# SPDX-FileCopyrightText: no
+# SPDX-License-Identifier: CC0-1.0
+#
+# KvantOS — группы пакетов установщика (netinstall).
+# Группы с именами, совпадающими с id из packagechooser_desktop.conf,
+# включаются выбором окружения (method: netinstall-select).
+---
+- name: "KvantOS required (hidden)"
+  description: "База KvantOS: ядро и репозиторий CachyOS"
+  hidden: true
+  selected: true
+  critical: true
+  packages:
+     - cachyos-keyring
+     - cachyos-mirrorlist
+     - linux-cachyos
+     - linux-cachyos-headers
+
+- name: "Учебный стек KvantOS"
+  description: "Toolchain для обучения программированию: компиляторы, python/jupyterlab, nodejs, rust, go, .NET, docker, БД, IDE. Можно снять галочку, если нужна чистая система."
+  hidden: false
+  selected: true
+  critical: false
+  packages:
+     - gcc
+     - clang
+     - cmake
+     - git
+     - gdb
+     - python
+     - python-pip
+     - jupyterlab
+     - nodejs
+     - npm
+     - rustup
+     - go
+     - dotnet-sdk
+     - docker
+     - docker-compose
+     - postgresql
+     - sqlite
+     - neovim
+     - fish
+     - tmux
+     - htop
+     - btop
+     - fastfetch
+     - wget
+     - httpie
+     # IDE из локального репозитория KvantOS (см. /opt/kvantos/customrepo)
+     - vscodium-bin
+     - jetbrains-toolbox
+
+- name: "Hyprland"
+  description: "Фирменный вариант KvantOS: Hyprland + Noctalia (Quickshell)."
+  hidden: false
+  selected: false
+  critical: true
+  packages:
+    - hyprland
+    - noctalia
+    - kitty
+    - uwsm
+    - xdg-desktop-portal-hyprland
+    - qt6ct
+    - nwg-look
+    - grim
+    - slurp
+    - wl-clipboard
+    - brightnessctl
+    - adw-gtk-theme
+    - noto-fonts
+    - noto-fonts-emoji
+    - dolphin
+    - gnome-text-editor
+    - gnome-calculator
+    - qview
+    - sddm
+
+- name: "KDE-Desktop"
+  description: "KDE Plasma: полноценный рабочий стол."
+  hidden: false
+  selected: false
+  critical: true
+  packages:
+    - plasma-desktop
+    - dolphin
+    - konsole
+    - kate
+    - ark
+    - spectacle
+    - gwenview
+    - sddm
+    - plasma-nm
+    - plasma-pa
+    - powerdevil
+    - kde-gtk-config
+    - kinfocenter
+    - kscreen
+    - kwallet-pam
+
+- name: "GNOME-Desktop"
+  description: "GNOME Shell с GDM."
+  hidden: false
+  selected: false
+  critical: true
+  packages:
+    - gnome-shell
+    - gnome-control-center
+    - gnome-terminal
+    - nautilus
+    - gdm
+    - gnome-keyring
+    - gnome-tweaks
+
+- name: "Xfce4"
+  description: "Лёгкий классический рабочий стол Xfce."
+  hidden: false
+  selected: false
+  critical: true
+  packages:
+    - xfce4
+    - sddm
+
+- name: "Cinnamon"
+  description: "Рабочий стол Cinnamon."
+  hidden: false
+  selected: false
+  critical: true
+  packages:
+    - cinnamon
+    - gnome-terminal
+    - sddm
+
+- name: "MATE-Desktop"
+  description: "Классический рабочий стол MATE."
+  hidden: false
+  selected: false
+  critical: true
+  packages:
+    - mate
+    - mate-extra
+    - sddm
+
+- name: "LXQT-Desktop"
+  description: "Лёгкая среда LXQt."
+  hidden: false
+  selected: false
+  critical: true
+  packages:
+    - lxqt
+    - sddm
+
+- name: "Budgie-Desktop"
+  description: "Рабочий стол Budgie."
+  hidden: false
+  selected: false
+  critical: true
+  packages:
+    - budgie
+    - gnome-terminal
+    - nautilus
+    - sddm
+
+- name: "Cosmic"
+  description: "Окружение COSMIC (System76) с cosmic-greeter."
+  hidden: false
+  selected: false
+  critical: true
+  packages:
+    - cosmic
+
+- name: "Sway"
+  description: "Тайлинговый композитор Wayland Sway."
+  hidden: false
+  selected: false
+  critical: true
+  packages:
+    - sway
+    - waybar
+    - wofi
+    - foot
+    - sddm
+
+- name: "i3-Window-Manager"
+  description: "Тайлинговый оконный менеджер i3 (X11)."
+  hidden: false
+  selected: false
+  critical: true
+  packages:
+    - i3-wm
+    - i3status
+    - dmenu
+    - rofi
+    - xterm
+    - lightdm
+    - lightdm-gtk-greeter
+
+- name: "Niri"
+  description: "Прокручиваемый тайлинговый композитор Wayland Niri."
+  hidden: false
+  selected: false
+  critical: true
+  packages:
+    - niri
+    - waybar
+    - fuzzel
+    - foot
+    - sddm
+
+- name: "Qtile"
+  description: "Оконный менеджер Qtile (конфигурация на Python, X11)."
+  hidden: false
+  selected: false
+  critical: true
+  packages:
+    - qtile
+    - xterm
+    - lightdm
+    - lightdm-gtk-greeter
+
+- name: "bspwm"
+  description: "Тайлинговый оконный менеджер bspwm (X11)."
+  hidden: false
+  selected: false
+  critical: true
+  packages:
+    - bspwm
+    - sxhkd
+    - rofi
+    - xterm
+    - lightdm
+    - lightdm-gtk-greeter
+
+- name: "Wayfire"
+  description: "Композитор Wayland Wayfire с эффектами."
+  hidden: false
+  selected: false
+  critical: true
+  packages:
+    - wayfire
+    - waybar
+    - wofi
+    - sddm
+
+- name: "Мультимедиа и кодеки"
+  description: "Медиафреймворк GStreamer (включая «плохие» и «уродливые» плагины), ffmpeg и аудиокодеки — чтобы видео и музыка воспроизводились из коробки."
+  hidden: false
+  selected: false
+  critical: false
+  packages:
+    - gst-plugins-base
+    - gst-plugins-good
+    - gst-plugins-bad
+    - gst-plugins-ugly
+    - gst-libav
+    - gst-plugin-pipewire
+    - ffmpeg
+    - opus
+    - libvorbis
+    - flac
+    - wavpack
+
+- name: "Печать и сканирование"
+  description: "CUPS с фильтрами и драйверами foomatic, менеджер печати Plasma, SANE с драйвером airscan для сетевых сканеров."
+  hidden: false
+  selected: false
+  critical: false
+  packages:
+    - cups
+    - cups-pdf
+    - cups-filters
+    - print-manager
+    - foomatic-db
+    - foomatic-db-engine
+    - ghostscript
+    - sane
+    - sane-airscan
+    - simple-scan
+    - system-config-printer
+
+- name: "Декларативный стек (Nix)"
+  description: "nix и git для декларативного пользовательского окружения: шаблоны flake.nix/home.nix лежат в /etc/skel/kvantos, управление — командой kvantos-mode. Ставится при выборе режима Nix."
+  hidden: false
+  selected: false
+  critical: false
+  packages:
+    - nix
+    - git

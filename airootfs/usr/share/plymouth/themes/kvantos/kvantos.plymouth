@@ -1,0 +1,8 @@
+[Plymouth Theme]
+Name=KvantOS
+Description=KvantOS boot splash: star orbit, glow, starfield, comets (spec v5)
+ModuleName=script
+
+[script]
+ImageDir=/usr/share/plymouth/themes/kvantos
+ScriptFile=/usr/share/plymouth/themes/kvantos/kvantos.script

@@ -1,0 +1,7 @@
+NAME="KvantOS"
+PRETTY_NAME="KvantOS"
+ID=kvantos
+ID_LIKE=arch
+VERSION_ID=rolling
+BUILD_ID=rolling
+ANSI_COLOR="38;2;200;235;245"

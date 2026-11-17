@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=KvantOS Hello
+Comment=Приветственное окно KvantOS: документация, ссылки, запуск установщика
+Exec=/usr/bin/kvantos-hello
+Icon=org.kvantos.hello
+Terminal=false
+OnlyShowIn=KDE;
+X-GNOME-Autostart-enabled=false
